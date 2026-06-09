@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>AImposter — Can You Spot the AI? | Real or AI Game</title>
+<meta name="description" content="Real photo or AI-generated? Guess image after image, build your combo, climb the ranks. The free 'spot the AI' game with a new daily challenge." />
+<meta name="keywords" content="real or ai, spot the ai, ai or not, is it ai, ai image game, can you tell ai, ai detector game, real or fake photo" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕵️</text></svg>" />
+<meta property="og:title" content="AImposter — Can You Spot the AI?" />
+<meta property="og:description" content="Real photo or AI? Build a combo, climb the ranks. How long can your streak survive?" />
+<meta property="og:type" content="website" />
+
+<!-- GOOGLE ADSENSE: paste publisher id + uncomment. Refresh is user-click-driven only (compliant).
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="app">
+
+  <header class="topbar">
+    <div class="brand" id="brand-home">
+      <span class="brand-mark">🕵️</span>
+      <span class="brand-name">AI<span class="brand-accent">mposter</span></span>
+    </div>
+    <div class="top-actions">
+      <button class="coins" id="coins-pill" title="Coins — tap for shop">🪙 <span id="coin-n">0</span></button>
+      <button class="iconbtn" id="league-btn" title="League">🏆</button>
+      <button class="iconbtn" id="shop-btn" title="Shop">🛒</button>
+      <button class="iconbtn" id="vault-btn" title="My Vault">🎴</button>
+      <button class="iconbtn" id="sound-toggle" title="Sound">🔊</button>
+    </div>
+  </header>
+
+  <nav class="modes" id="modes">
+    <button class="mode-btn is-active" data-mode="daily">Daily</button>
+    <button class="mode-btn" data-mode="endless">Endless</button>
+    <button class="mode-btn" data-mode="blitz">⚡ Blitz</button>
+  </nav>
+
+  <div class="ad-rail" data-ad="top"></div>
+
+  <main class="stage">
+
+    <!-- START -->
+    <section class="screen" id="screen-start">
+      <div class="rankcard" id="rankcard">
+        <div class="rank-top"><span id="rank-title">Rookie Spotter</span><span id="rank-level">Lv 1</span></div>
+        <div class="xpbar"><div id="xpfill"></div></div>
+        <div class="xp-sub" id="xp-sub">0 / 250 XP</div>
+      </div>
+      <div class="daystreak" id="daystreak"></div>
+      <div class="ch-banner hidden" id="ch-banner"></div>
+
+      <h1 class="hook" id="hook">Real photo… or AI?</h1>
+      <p class="sub" id="sub">Build a combo. Climb the ranks. How long can your streak survive?</p>
+      <button class="cta" id="btn-play">Play</button>
+      <p class="micro" id="daily-note"></p>
+
+      <div class="start-stats" id="start-stats"></div>
+      <div class="ach-wrap">
+        <div class="ach-title">Badges <span id="ach-count"></span></div>
+        <div class="ach-row" id="ach-row"></div>
+      </div>
+      <div class="lb-wrap">
+        <div class="ach-title">🏆 Leaderboard</div>
+        <div class="lb-list" id="lb-list"></div>
+      </div>
+    </section>
+
+    <!-- GAME -->
+    <section class="screen hidden" id="screen-game">
+      <div class="hud">
+        <div class="hud-left" id="hud-progress">Round 1</div>
+        <div class="hud-center" id="hud-lives"></div>
+        <div class="hud-right"><span id="hud-score">0</span><span id="hud-combo" class="combo"></span></div>
+      </div>
+      <div class="timebar hidden" id="timebar"><div id="timefill"></div></div>
+
+      <div class="card" id="card">
+        <div class="img-wrap">
+          <img id="round-img" alt="Is this image real or AI generated?" />
+          <div class="verdict-badge hidden" id="verdict-badge"></div>
+          <div class="fx" id="fx"></div>
+          <!-- reveal shows as an OVERLAY on the image — never shifts the layout -->
+          <div class="reveal-overlay hidden" id="reveal">
+            <p class="reveal-verdict" id="reveal-verdict"></p>
+            <p class="reveal-points" id="reveal-points"></p>
+            <p class="reveal-truth" id="reveal-truth"></p>
+            <p class="reveal-social" id="reveal-social"></p>
+            <p class="reveal-fact" id="reveal-fact"></p>
+          </div>
+        </div>
+
+        <!-- fixed-height action band: Real/AI and Next occupy the SAME spot -->
+        <div class="action-zone">
+          <div class="choices" id="choices">
+            <div class="choice-row">
+              <button class="choice real" data-guess="real">📷 Real</button>
+              <button class="choice ai" data-guess="ai">🤖 AI</button>
+            </div>
+            <div class="powerups" id="powerups">
+              <button class="pu" id="pu-hint">🔍 Hint <b id="pu-hint-n">3</b></button>
+              <button class="pu" id="pu-skip">⏭️ Skip <b id="pu-skip-n">1</b></button>
+            </div>
+          </div>
+          <button class="cta next hidden" id="btn-next">Next →</button>
+          <div class="tip hidden" id="tip"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULT -->
+    <section class="screen hidden" id="screen-result">
+      <h2 id="result-title">Run over</h2>
+      <div class="result-score" id="result-score"></div>
+      <div class="result-grid" id="result-grid"></div>
+      <p class="result-line" id="result-line"></p>
+      <div class="ch-compare" id="ch-compare"></div>
+      <div class="percentile" id="percentile"></div>
+      <div class="xp-gain" id="xp-gain"></div>
+      <div class="ach-earned" id="ach-earned"></div>
+      <div class="card-earned hidden" id="card-earned"></div>
+      <button class="cta box-btn hidden" id="btn-box">🎁 Open Mystery Box</button>
+      <div class="ad-rail" data-ad="result"></div>
+      <div class="result-actions">
+        <button class="cta" id="btn-share">📋 Share</button>
+        <button class="cta ghost" id="btn-again">Play again</button>
+      </div>
+      <div class="challenge-box">
+        <input id="name-input" class="name-input" maxlength="24" placeholder="Your name" />
+        <button class="cta challenge" id="btn-challenge">🎯 Challenge a friend</button>
+      </div>
+      <p class="micro" id="share-toast"></p>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    <button class="link" id="how-link">How it works</button>
+    <span>·</span><span>AImposter — a "spot the AI" game</span>
+    <div class="how hidden" id="how-box">
+      <p><strong>Spot the fake.</strong> Each image is a real photo or AI-generated. Tap your guess. Chain correct answers to build a <b>combo multiplier</b> — your score snowballs. Earn XP, climb from Rookie to Spectre, and unlock badges.</p>
+      <p><strong>Modes:</strong> <b>Daily</b> = 10 fixed images, share your 🟩🟥 grid. <b>Endless</b> = 3 lives, survive as long as you can (revive once if you fall). <b>⚡Blitz</b> = 60 seconds, go fast.</p>
+    </div>
+  </footer>
+
+  <!-- OVERLAYS -->
+  <div class="overlay hidden" id="revive-overlay">
+    <div class="modal">
+      <div class="modal-emoji">💀</div>
+      <h3>Out of lives!</h3>
+      <p id="revive-line">Don't lose your run. Revive and keep going?</p>
+      <button class="cta hidden" id="btn-revive-token">❤️ Use Revive Token (free)</button>
+      <button class="cta revive" id="btn-revive">▶ Watch ad — Revive</button>
+      <button class="link" id="btn-endrun">No thanks, end run</button>
+    </div>
+  </div>
+  <div class="overlay hidden" id="ad-overlay">
+    <div class="modal ad-modal">
+      <div class="ad-spinner"></div>
+      <p>Ad playing… <span id="ad-count">3</span></p>
+      <span class="micro">(rewarded ad — your highest-value ad slot)</span>
+    </div>
+  </div>
+
+  <!-- Daily reward -->
+  <div class="overlay hidden" id="daily-overlay">
+    <div class="modal">
+      <div class="modal-emoji">🎁</div>
+      <h3>Daily Reward</h3>
+      <p id="daily-reward-line">Welcome back!</p>
+      <div class="reward-amt" id="daily-reward-amt">+50 🪙</div>
+      <button class="cta" id="btn-claim-daily">Claim</button>
+    </div>
+  </div>
+
+  <!-- League -->
+  <div class="overlay hidden" id="league-overlay">
+    <div class="modal league-modal">
+      <h3>🏆 <span id="league-name">Bronze League</span></h3>
+      <p class="league-sub" id="league-sub"></p>
+      <div class="lg-list" id="league-list"></div>
+      <button class="link" id="btn-close-league">Close</button>
+    </div>
+  </div>
+
+  <!-- Shop -->
+  <div class="overlay hidden" id="shop-overlay">
+    <div class="modal shop-modal">
+      <h3>🛒 Shop</h3>
+      <p class="shop-bal">Balance: 🪙 <b id="shop-coins">0</b></p>
+      <div class="shop-list" id="shop-list"></div>
+      <button class="link" id="btn-close-shop">Close</button>
+    </div>
+  </div>
+
+  <!-- Vault -->
+  <div class="overlay hidden" id="vault-overlay">
+    <div class="modal vault-modal">
+      <h3>🎴 My Vault</h3>
+      <p class="vault-sub" id="vault-sub"></p>
+      <div class="vault-grid" id="vault-grid"></div>
+      <button class="link" id="btn-close-vault">Close</button>
+    </div>
+  </div>
+
+  <div class="toast-wrap" id="toast-wrap"></div>
+  <div class="confetti" id="confetti"></div>
+
+</div>
+<script src="game.js"></script>
+</body>
+</html>
